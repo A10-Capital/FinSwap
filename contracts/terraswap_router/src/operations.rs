@@ -80,7 +80,7 @@ pub fn asset_into_swap_msg(
                 amount: offer_asset.amount,
             }],
             msg: to_binary(&PairExecuteMsg::Swap {
-                offer_asset,
+                offer_asset: Some(offer_asset),
                 belief_price: None,
                 max_spread,
                 to,
@@ -93,7 +93,7 @@ pub fn asset_into_swap_msg(
                 contract: pair_contract.to_string(),
                 amount: offer_asset.amount,
                 msg: to_binary(&PairExecuteMsg::Swap {
-                    offer_asset,
+                    offer_asset: Some(offer_asset),
                     belief_price: None,
                     max_spread,
                     to,

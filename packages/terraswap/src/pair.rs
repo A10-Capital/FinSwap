@@ -27,7 +27,7 @@ pub enum ExecuteMsg {
     },
     /// Swap an offer asset to the other
     Swap {
-        offer_asset: Asset,
+        offer_asset: Option<Asset>,
         belief_price: Option<Decimal>,
         max_spread: Option<Decimal>,
         to: Option<String>,

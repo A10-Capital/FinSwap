@@ -17,6 +17,7 @@ use protobuf::Message;
 use std::cmp::Ordering;
 use std::str::FromStr;
 use terraswap::asset::{Asset, AssetInfo, PairInfo, PairInfoRaw};
+use terraswap::asset::AssetInfo::NativeToken;
 use terraswap::pair::{
     Cw20HookMsg, ExecuteMsg, InstantiateMsg, MigrateMsg, PoolResponse, QueryMsg,
     ReverseSimulationResponse, SimulationResponse,
@@ -92,9 +93,23 @@ pub fn execute(
             max_spread,
             to,
         } => {
-            if !offer_asset.is_native_token() {
-                return Err(ContractError::Unauthorized {});
-            }
+            let funds = info.funds[0].clone(); //can break if it's a multiple asset swap, is that even a thing?
+            let offer_asset: Asset = match offer_asset {
+                None => {
+                     Asset {
+                         info: NativeToken {
+                             denom: funds.denom.clone()
+                         },
+                         amount: funds.amount.clone(),
+                     }
+                }
+                Some(asset) => {
+                    if !asset.is_native_token() {
+                        return Err(ContractError::Unauthorized {});
+                    }
+                    asset
+                }
+            };
 
             let to_addr = if let Some(to_addr) = to {
                 Some(deps.api.addr_validate(&to_addr)?)
