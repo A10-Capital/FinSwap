@@ -1,8 +1,11 @@
 #!/bin/bash
-# KEY= WASM_PATH= INIT_MSG='{}' LABEL= ADMIN= sh deploy.sh
+# KEY= DENOM= sh deploy.sh
 set -e
 
 GAS="--gas-prices 0.25ukuji --gas auto --gas-adjustment 1.5 -y -b block"
+
+# Get the Admin Wallet Address from the Key Name
+ADMIN=$(kujirad keys show $KEY -a) && echo "Admin: $ADMIN"
 
 # Upload Pair Contract
 CONTRACT=$(kujirad tx wasm store artifacts/terraswap_pair.wasm --from $KEY -y --broadcast-mode sync --output json $GAS | jq -r '.txhash') && echo $CONTRACT
