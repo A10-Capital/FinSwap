@@ -65,6 +65,6 @@ CREATE_PAIR_RESULT=$(eval $CREATE_PAIR_MSG | jq -r '.txhash') && echo "Create Pa
 sleep 1
 PAIR_ADDR=$(kujirad query tx $CREATE_PAIR_RESULT --output json | jq -r '.logs[0].events[] | select(.type == "wasm") | .attributes[] | select(.key == "pair_contract_addr") | .value') && echo "Pair Address: $PAIR_ADDR"
 # Provide Liquidity to Pair
-PROVIDE_LIQ_MSG="'{\"provide_liquidity\":{\"assets\":[{\"info\":{\"native_token\":{\"denom\":\"ukuji\"}},\"amount\":\"50000000000\"},{\"info\":{\"native_token\":{\"denom\":\"${DENOM}\"}},\"amount\":\"500000000000\"}]}}'"
-MSG="kujirad tx wasm execute $PAIR_ADDR $PROVIDE_LIQ_MSG $GAS --from $KEY --output json --amount 50000000000ukuji,500000000000${DENOM}"
+PROVIDE_LIQ_MSG="'{\"provide_liquidity\":{\"assets\":[{\"info\":{\"native_token\":{\"denom\":\"ukuji\"}},\"amount\":\"10000000\"},{\"info\":{\"native_token\":{\"denom\":\"${DENOM}\"}},\"amount\":\"500000000000\"}]}}'"
+MSG="kujirad tx wasm execute $PAIR_ADDR $PROVIDE_LIQ_MSG $GAS --from $KEY --output json --amount 10000000ukuji,500000000000${DENOM}"
 PROVIDE_LIQ_RESULT=$(eval $MSG | jq -r '.txhash') && echo "Provide Liquidity: $PROVIDE_LIQ_RESULT"
